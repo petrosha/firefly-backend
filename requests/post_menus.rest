@@ -1,0 +1,8 @@
+POST http://localhost:8001/api/users/345
+content-type: application/json
+
+{
+    "menu":"menu",
+    "action":"set_menus",
+    "data": ["systems","users"]
+}

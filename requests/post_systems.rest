@@ -1,0 +1,8 @@
+POST http://localhost:8001/api/users/123
+content-type: application/json
+
+{
+    "menu":"systems",
+    "action":"switchOn",
+    "data": "medLab1"
+}
