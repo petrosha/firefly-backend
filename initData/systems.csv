@@ -1,20 +1,21 @@
 name,screenName,type,power,fuelStorage,fuelConsumption,switchedOn,broken,hidden,effectiveness,effectivenessTime,descr
 pow1,Реактор 1,power,100,0,1,TRUE,FALSE,FALSE,1,0,Производит электричество из топлива. 
 pow2,Реактор 2,power,100,0,1,TRUE,FALSE,FALSE,1,0,Производит электричество из топлива. 
-fuel1,Топливо,fuel,-1,1000,0,FALSE,FALSE,FALSE,1,0,Нужно для работы реактора
-mainJet1,Маршевый,mainJet,-15,0,0,TRUE,FALSE,FALSE,1,0,Нужен для перелетов между планетами
-manJet1,Маневровый 1,maneuverJet,-10,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
-manJet2,Маневровый 2,maneuverJet,-10,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
-manJet3,Маневровый 3,maneuverJet,-10,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
-manJet4,Маневровый 4,maneuverJet,-10,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
-door1,Шлюз,door,-10,0,0,FALSE,TRUE,FALSE,1,0,Для выхода в космос и на базу
+fuel1,Топливо,fuel,-30,1000,0,FALSE,FALSE,FALSE,1,0,Нужно для работы реактора
+mainJet1,Маршевый,mainJet,-50,0,0,TRUE,FALSE,FALSE,1,0,Нужен для перелетов между планетами
+manJet1,Маневровый 1,maneuverJet,-30,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
+manJet2,Маневровый 2,maneuverJet,-20,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
+manJet3,Маневровый 3,maneuverJet,-20,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
+manJet4,Маневровый 4,maneuverJet,-30,0,0,FALSE,FALSE,FALSE,1,0,Нужен для маневров около планет и станций
+door1,Шлюз,door,-30,0,0,FALSE,TRUE,FALSE,1,0,Для выхода в космос и на базу
 navComp1,Нав. компьютер,navComp,-20,0,0,FALSE,FALSE,FALSE,1,0,Нужен для полетов. 
-lifeSys1,СЖО,lifeSys,-20,0,0,FALSE,FALSE,FALSE,1,0,"Вырабатывает кислород, поддерживает температуру"
-medLab1,Медблок,medLab,-10,0,0,FALSE,FALSE,FALSE,1,0,Лечение
-light1,Освещение,light,-10,0,0,FALSE,FALSE,FALSE,1,0,Везде темно.
+lifeSys1,СЖО,lifeSys,-30,0,0,FALSE,FALSE,FALSE,1,0,"Вырабатывает кислород, поддерживает температуру"
+medLab1,Медблок,medLab,-20,0,0,FALSE,FALSE,FALSE,1,0,Лечение
+light1,Освещение,light,-20,0,0,FALSE,FALSE,FALSE,1,0,Везде темно.
 radar1,Радар,radar,-10,0,0,FALSE,FALSE,FALSE,1,0,Показывает локальный космос
-scaner1,Сканер,scaner,-10,0,0,FALSE,FALSE,FALSE,1,0,Показывает информацию об объектах в космосе
+scaner1,Сканер,scaner,-10,0,0,FALSE,FALSE,TRUE,1,0,Показывает информацию об объектах в космосе
 radio1,Радио,radio,-15,0,0,FALSE,FALSE,FALSE,1,0,Межпланетная связь
 beacon1,Транспондер,beacon,-10,0,0,FALSE,FALSE,FALSE,1,0,Маячок слежения
-gun1,Пушка Гаусса,gun,50,0,0,FALSE,FALSE,TRUE,1,0,Орудие ближнего боя
-shield1,Генератор щита,shield,15,0,0,FALSE,FALSE,TRUE,1,0,Защитный экран
+gun1,Пушка Гаусса,gun,-50,0,0,FALSE,FALSE,TRUE,1,0,Орудие ближнего боя
+supergun1,Суперпушка,supergun,-50,0,0,FALSE,FALSE,TRUE,1,0,Улучшенное орудие ближнего боя
+shield1,Генератор щита,shield,-50,0,0,FALSE,FALSE,TRUE,1,0,Защитный экран

@@ -4,6 +4,8 @@ const { request } = require("express");
 // const Systems = require("../models/systems_db.js");
 let {menuCacheClientAdd, menuCacheAction} = require("../store/menu_store.js");
 let systems = require("../store/systems_store.js");
+let pilot = require("../store/pilot_store.js");
+let sounds = require("../store/sounds_store.js");
 let menuObj=global.menus;
 
 usersRouter.get("/", (request, response) => response.status(404).send('no ID received'));
@@ -64,6 +66,10 @@ function postActionAndReply(id, body, admin = false){
         return menuCacheAction(id, body, admin);
     case "systems":
         return systems.systemsAction(id, body, admin);
+    case "pilot":
+        return pilot.pilotAction(id, body, admin);
+    case "sounds":
+        return sounds.soundsAction(id, body, admin);    
     default:
         return false;
     }  

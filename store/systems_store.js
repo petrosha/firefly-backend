@@ -1,8 +1,8 @@
 const csv = require('csv-parser');
 const fs = require('fs');
-const { trimEnd } = require('lodash');
-const { emitKeypressEvents } = require('readline');
 
+
+const sounds = require('./sounds_store');
 //const menuDbModel=require("../models/menu_clients_db");
 
 let systemsFileRead=(localSystems)=>{
@@ -21,13 +21,13 @@ let systemsFileRead=(localSystems)=>{
         })
         .on('end', () => {
             localSystems.timeStamp=Date.now();
-            setInterval(systemsCycleAction,1000);
+            // setInterval(systemsCycleAction,1000);
             // console.log(localSystems);
         });
 }
 
 let systemsCacheInit=()=>{
-    global.systems={timeStamp: undefined, data:[]}
+    global.systems={timeStamp: undefined, cycle: false, maxFuelLevel:1000, data:[]}
     systemsFileRead(global.systems);
 }
 
@@ -56,13 +56,25 @@ let actionChangeFuel=(data)=>{
         let chgData=Number(data);
         if(chgData){
             console.log("CHANGING FUEL: ",chgData);
-            if(system.fuelStorage+chgData>=0 &&system.fuelStorage+chgData<=1000){
-                system.fuelStorage += chgData;
-                return true;           
-            }
+            if(system.fuelStorage+chgData>=0 /*&&system.fuelStorage+chgData<=1000*/){
+                system.fuelStorage += chgData;           
+            } else system.fuelStorage=0;
+            global.systems.timeStamp=Date.now();
+            return true;
         }
     }
     return false;
+}
+
+
+let actionMaxFuelLevelChange=(data)=>{
+    let newLevel= Number(data);
+    console.log("NewLevel: ", newLevel)
+    if(!newLevel) return false;
+    if(newLevel>0) global.systems.maxFuelLevel=newLevel; 
+    global.systems.timeStamp=Date.now();
+    return true;
+
 }
 
 let actionSwitchOff=(data)=>{
@@ -88,7 +100,9 @@ let actionBrokenOn=(data)=>{
         if(!(system.hidden)) {
             console.log("BREAKING ON!");
             actionSwitchOff(system.name);
-            system.broken = true;              
+            system.broken = true;  
+            sounds.soundsPlayListAdd("systemFailure2",false);
+            global.systems.timeStamp=Date.now();            
             return true;
         };
     }
@@ -100,16 +114,26 @@ let actionBrokenOff=(data)=>{
     if(system) {
         actionSwitchOff(system.name);
         system.broken = false;
+        if(!global.systems.data.find((el)=>el.broken)) sounds.soundsPlayListDel("systemFailure2");
         return true;
     }
     return false;
+}
+
+let actionBreakMultiple = (fixedNum,randomNum) => {
+    let systems=global.systems.data;
+    let numberOfSysToBreak=fixedNum+Math.round(randomNum*Math.random());
+    for(let j=0;j<numberOfSysToBreak;j++){
+        let tmpSys=systems[Math.floor(systems.length*Math.random())].name;
+        actionBrokenOn(tmpSys);
+    }
 }
 
 let actionHiddenOn=(data)=>{
     let system = global.systems.data.find((el)=>el.name===data);
     if(system) {
         actionSwitchOff(system.name);
-        system.broken = false;
+        actionBrokenOff(system.name);
         system.hidden = true;                      
         return true;
     }
@@ -125,6 +149,15 @@ let actionHiddenOff=(data)=>{
         return true;
     }
     return false;
+}
+let actionCycleOn=()=>{
+    global.systems.cycle = true;
+    return true;
+}
+
+let actionCycleOff=()=>{
+    global.systems.cycle = false;
+    return true;
 }
 
 let systemsAction = (id, body, admin) => {
@@ -154,6 +187,15 @@ let systemsAction = (id, body, admin) => {
             break;            
         case "changeFuel":
             returnValue = actionChangeFuel(body.data);
+            break;
+        case "cycleOn":
+            returnValue = actionCycleOn();
+            break;
+        case "cycleOff":
+            returnValue = actionCycleOff();
+            break;      
+        case "maxFuelLevelSet":
+            returnValue = actionMaxFuelLevelChange(body.data);
             break;   
         }
     }
@@ -163,19 +205,25 @@ let systemsAction = (id, body, admin) => {
 }  
 
 let systemsCycleAction=()=>{
-    let amount = global.systems.data.filter(el=>el.fuelConsumption>0).reduce((prev,el)=>prev+el.fuelConsumption*Number(el.switchedOn),0);
-    let fuel = global.systems.data.find((el)=>el.name==="fuel1").fuelStorage;
-    while(fuel-amount<0){
-        actionSwitchOff(global.systems.data.find((el)=>el.power*Number(el.switchedOn)>0).name);
-        amount = global.systems.data.filter(el=>el.fuelConsumption>0).reduce((prev,el)=>prev+el.fuelConsumption*Number(el.switchedOn),0);
+    if(global.systems.cycle){
+        let amount = global.systems.data.filter(el=>el.fuelConsumption>0).reduce((prev,el)=>prev+el.fuelConsumption*Number(el.switchedOn),0);
+        let fuel = global.systems.data.find((el)=>el.name==="fuel1").fuelStorage;
+        while(fuel-amount<0){
+            actionSwitchOff(global.systems.data.find((el)=>el.power*Number(el.switchedOn)>0).name);
+            amount = global.systems.data.filter(el=>el.fuelConsumption>0).reduce((prev,el)=>prev+el.fuelConsumption*Number(el.switchedOn),0);
+        }
+        actionChangeFuel(-1*amount);
+        global.systems.timeStamp=Date.now();
     }
-    actionChangeFuel(-1*amount);
-    global.systems.timeStamp=Date.now();
 }
 
 
 module.exports= { 
     systemsFileRead,
     systemsCacheInit,
-    systemsAction
+    systemsAction,
+    systemsCycleAction,
+    actionBrokenOn,
+    actionBreakMultiple,
+    actionChangeFuel
 };

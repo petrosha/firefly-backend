@@ -12,11 +12,15 @@ let menuNames=[
         hidden:false
     },
     {
-        name: "news",
+        name: "pilot",
         admin:false,
         hidden:false
+    },
+    {
+        name: "sounds",
+        admin:false,
+        hidden:true
     }
-
 ]
 
 // different with user
@@ -64,7 +68,6 @@ let menuCacheClientAdd=(id) => {
     }
 
     localObj.users.timeStamp=localObj.menus.clientsCache[id].userTimeStamp;
-
     return true; 
 }
 
@@ -98,6 +101,8 @@ let menuCacheClientSetMenus=(id, menuList) => {
     }
 
     localObj.menus.clientsCache[id].menuList=[...menuList];
+    
+    localObj.menus.clientsCache[id].menuList.push("sounds");    
     localObj.menus.clientsCache[id].menuTimeStamp = Date.now();
     return true; 
 }
